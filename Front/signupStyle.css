@@ -1,0 +1,61 @@
+.left, .right{
+	height:100%;
+	width:100%;
+}
+
+body { 
+	font-family: "Times New Roman", Times, serif;
+	color: black; 
+}
+
+.left{
+	background: url(background2.jpg);
+	background-size: cover;
+	background-position: center;
+}
+
+.right{
+	background: #bfbfbf;
+}
+				
+form { 
+	width: 80%;  
+	margin: auto; 
+	border: 5px solid #f1f1f1; 
+	padding: 15px; 
+	background-color: white; 
+	opacity: 0.8; 
+}
+
+input[type=text], input[type=password] { 
+	width: 95%; 
+	padding: 10px; 
+	margin: 5px 0 20px 0; 
+	display: inline-block; 
+	border: none; 
+	background: #f1f1f1;
+}
+						  
+hr { 
+	border: 1px solid #f1f1f1;
+}
+
+.btn { 
+	display: inline-block; 
+	position: relative; 
+	margin: 10px; 
+	padding: 5px 30px; 
+	text-align: center; 
+	font: 15px/20px Arial, sans-serif; 
+	background-color: blue; 
+	color: white;   
+	opacity: 0.8;
+}	
+	   
+.btn:hover { opacity: 1;}	
+
+.subResp {color: blue;}
+
+#msg {display: none;}
+
+#rtn {display: none;}

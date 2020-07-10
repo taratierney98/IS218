@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+	<link href="loginStyle.css" rel="stylesheet">
+	
+</head>
+<body>
+
+	<div class="row no-gutters">
+	
+		<div class="col-md-6 no-gutters">
+			<div class="left d-flex justify-content-center align-items-center"></div>
+		</div>
+		
+		<div class="col-md-6 no-gutters">
+			
+			<div class="right d-flex justify-content-center align-items-center">
+				
+				<form id='myform' action="signup.php" method="post">
+					<center>
+					<h2>Login</h2> <hr>
+					<div id="cred_status" class="logResp"> </div>
+					</center>
+									
+					<label for="username"> <h3>Username </h3></label>	
+					<div id="u_resp" class="logResp"> </div> 
+					<input type=text id="username" placeholder="Enter your username" autocomplete="off"  width="100%"><br>				
+							
+					<label for="password"> <h3>Password</h3></label>
+					<div id="p_resp" class="logResp"> </div>
+					<input type=password id="password" placeholder="Enter your password" autocomplete="off"> <br>
+					<input type="checkbox" id="showP">Show Password <br>
+						
+					<center>	
+					<p>Don't have an account? <a href="https://web.njit.edu/~tat22/IS218/Project2/Front/signup.html">Sign up here</a></p> <br>		
+					<input type=button id="login" class="btn" value="Login">
+					</center><br>	
+				</form>
+				
+			</div>
+		
+		</div>
+	</div>	
+</body>
+</html>
+
+<script>
+var ptrU = document.getElementById("username");
+var ptrP = document.getElementById("password");
+
+var ptrCheckbox = document.getElementById("showP");
+	ptrCheckbox.addEventListener("click", showHidePass);
+
+var ptrBtn = document.getElementById("login");
+	ptrBtn.addEventListener("click",checkInput);
+	
+// Hide or show the password text
+function showHidePass()
+{
+	if (ptrP.type === "password") 
+		ptrP.type = "text";
+	else 
+		ptrP.type = "password";
+}
+
+// triggered when the users presses the login button
+function checkInput()
+{	
+	var username = ptrU.value;
+	var password = ptrP.value;
+	
+	var allGood = true; // true if all login credentials are valid
+	
+	// Clear any previous invalid login notifications
+	document.getElementById('cred_status').innerHTML = "";
+	
+	// Check that a username was entered and is a valid email address
+	if(username == "")
+	{	
+		document.getElementById("u_resp").innerHTML = "Please enter your username.";
+		allGood = false;
+	}	
+	else
+	{	
+		if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(username)))
+		{
+			document.getElementById("u_resp").innerHTML = "The entered username is not a valid email.";
+			allGood = false;
+		}	
+		else
+			document.getElementById("u_resp").innerHTML = "";	
+	}
+	
+	// Check that a password was entered
+	if(password == "")
+	{	
+		document.getElementById("p_resp").innerHTML = "Please enter your password.";
+		allGood = false;
+	}	
+	else
+	{
+		document.getElementById("p_resp").innerHTML = "";
+	}
+
+	// Validate the login credentials
+	if(allGood)
+	{	  
+		// Request data from the backend and either update the page or redirect the user accordingly
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 200) 
+			{
+				var response = this.responseText;				
+				
+				if(response == "T")  // Login credentials were valid, so redirect the user to the home page
+				{ 
+					window.location.href = "https://web.njit.edu/~tat22/IS218/Project2/Front/home.php"; 
+				}
+				else
+				{
+					// Login credentials were wrong, so inform the user
+					document.getElementById('cred_status').innerHTML = "Invalid login credentials.";
+				}	
+				
+			}
+		};
+		request.open("POST", "https://web.njit.edu/~tat22/IS218/Project2/Front/login.php", true);
+		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
+		// Send the entered username and password to the back end
+		request.send("username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password));
+	}
+}	
+
+</script>

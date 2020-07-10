@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+	<link href="signupStyle.css" rel="stylesheet">
+	
+</head>
+<body>
+
+	<div class="row no-gutters">
+	
+		<div class="col-md-6 no-gutters">
+		
+			<div class="left d-flex justify-content-center align-items-center"></div>
+		
+		</div>
+		
+		<div class="col-md-6 no-gutters">
+			
+			<div class="right d-flex justify-content-center align-items-center">
+				
+				<form id='myform' action="signup.php" method="post">
+
+					<center>
+						<h2>Sign Up</h2> <hr><br>
+					</center>
+									
+					<div id="info">			
+						<label for="username"> <b>Username </b></label>
+						<div id="u_resp" class="subResp"> </div> 
+						<input type=text id="username" placeholder="Enter your username" autocomplete="off"  width="100%"><br>				
+								
+						<label for="password"> <b>Password</b></label>
+						<div id="p_resp" class="subResp"> </div> 
+						<input type=text id="password" placeholder="Enter your password" autocomplete="off"> <br>
+							
+						<label for="fname"> <b>First name</b></label>
+						<div id="fn_resp" class="subResp"> </div> 
+						<input type=text id="fname" placeholder="Enter your first name" autocomplete="off"> <br>
+							
+						<label for="lname"> <b>Last name</b></label>
+						<div id="ln_resp" class="subResp"> </div> 
+						<input type=text id="lname" placeholder="Enter your last name" autocomplete="off"> <br>
+							
+						<label for="college"> <b>College</b></label>
+						<div id="c_resp" class="subResp"> </div> 
+						<input type=text id="college" placeholder="Enter the name of your college" autocomplete="off"> <br>
+							
+						<label for="major"> <b>Major</b></label>
+						<div id="m_resp" class="subResp"> </div> 
+						<input type=text id="major" placeholder="Enter your major" autocomplete="off">
+					</div><br>
+						
+					<div id="sub">
+						<center>	
+							<input type=button id="signup" class="btn" value="Sign Up"><br><br>
+							<a href="https://web.njit.edu/~tat22/IS218/Project2/Front/login.html">Return to login page</a> <br>
+						</center>
+					</div>
+						
+					<center><input type=button id="rtn" class="btn" value="Return to login page"></center><br><br>
+						
+				</form>
+				
+			</div>
+		
+		</div>
+	</div>
+		
+</body>
+</html>
+
+<script>
+
+var ptru = document.getElementById("username");
+var ptrp = document.getElementById("password");
+var ptrfn = document.getElementById("fname");
+var ptrln = document.getElementById("lname");
+var ptrc = document.getElementById("college");
+var ptrmj = document.getElementById("major");
+
+var ptrBtn = document.getElementById("signup");
+	ptrBtn.addEventListener("click",signUp);
+	
+var ptrRtn = document.getElementById("rtn");
+	ptrRtn.addEventListener("click",returnLog);
+	
+// Check that all input fields are filled in and the username is an email
+// If any inputs are missing or invalid, notify the user
+function signUp()
+{
+	var username = ptru.value; 	
+	var password = ptrp.value;
+	var fname = ptrfn.value;
+	var lname = ptrln.value;
+	var college = ptrc.value;
+	var major = ptrmj.value;
+
+	var allGood = true;
+	
+	// Check username
+	if(username == "")
+	{
+		document.getElementById("u_resp").innerHTML = "Please enter a username.";
+		allGood = false;
+	}
+	else
+	{
+		if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(username)))
+		{
+			document.getElementById("u_resp").innerHTML = "The entered username is not a valid email.";
+			allGood = false;
+		}	
+		else
+			document.getElementById("u_resp").innerHTML = "";	
+	}
+	
+	// Check password
+	if(password == "")
+	{
+		document.getElementById("p_resp").innerHTML = "Please enter a password.";
+		allGood = false;
+	}
+	else { document.getElementById("p_resp").innerHTML = ""; }
+	
+	// Check firstname
+	if(fname == "")
+	{
+		document.getElementById("fn_resp").innerHTML = "Please enter your first name.";
+		allGood = false;
+	}
+	else { document.getElementById("fn_resp").innerHTML = ""; }
+
+	// Check lastname
+	if(lname == "")
+	{
+		document.getElementById("ln_resp").innerHTML = "Please enter your last name.";
+		allGood = false;
+	}
+	else { document.getElementById("ln_resp").innerHTML = ""; }
+	
+	// Check school
+	if(college == "")
+	{
+		document.getElementById("c_resp").innerHTML = "Please enter your college.";
+		allGood = false;
+	}
+	else { document.getElementById("c_resp").innerHTML = ""; }
+
+	// Check major
+	if(major == "")
+	{
+		document.getElementById("m_resp").innerHTML = "Please enter your major.";
+		allGood = false;
+	}
+	else { document.getElementById("m_resp").innerHTML = "";}	
+	
+	if(allGood)
+		sendInfo();
+}
+
+// All inputs are filled and valid, so send the information to the backend
+function sendInfo()
+{			
+	var username = ptru.value; 	
+	var password = ptrp.value;
+	var fname = ptrfn.value;
+	var lname = ptrln.value;
+	var college = ptrc.value;
+	var major = ptrmj.value;
+
+	// Send the user data to the backend and update the current page
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function() 
+	{
+		if (this.readyState == 4 && this.status == 200) 
+		{
+			var response = this.responseText;	
+
+			document.getElementById("info").innerHTML = "<center>You have successfully signed up! Return to the login page to log in and view your tasks.</center>";
+			document.getElementById("sub").style.display = "none";
+			document.getElementById("rtn").style.display = "block";	
+							
+		}
+	};
+	request.open("POST", "https://web.njit.edu/~tat22/IS218/Project2/Back/signup.php", true); 
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
+	request.send("username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password)+"&fname="+encodeURIComponent(fname)+
+				 "&lname="+encodeURIComponent(lname)+"&college="+encodeURIComponent(college)+"&major="+encodeURIComponent(major));
+}
+
+// Redirect user back to the login.html when the "Return to login page" button is pressed
+function returnLog()
+{	
+	window.location.href = "https://web.njit.edu/~tat22/IS218/Project2/Front/login.html"; 
+}
+
+</script>
